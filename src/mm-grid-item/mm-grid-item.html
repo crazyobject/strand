@@ -4,10 +4,11 @@
  * This code may only be used under the BSD style license found at http://mediamath.github.io/strand/LICENSE.txt
 
 -->
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../mm-checkbox/mm-checkbox.html">
-<link rel="import" href="../mm-icon/mm-icon.html">
-<link rel="import" href="../mm-spinner/mm-spinner.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../mm-checkbox/mm-checkbox.html"/>
+<link rel="import" href="../mm-icon/mm-icon.html"/>
+<link rel="import" href="../mm-spinner/mm-spinner.html"/>
+<link rel="import" href="../mm-inline-edit/mm-inline-edit.html"/>
 <link rel="import" href="../shared/behaviors/refable.html"/>
 
 <dom-module id="mm-grid-item">
@@ -21,12 +22,29 @@
 				<mm-icon width="10" height="10" type="carat" on-tap="_onItemExpanded"></mm-icon>
 			</div>
 			<div id="columnContainer">
+				
 				<template is="dom-repeat" items="{{scope._columns}}" as="column" on-dom-change="_checkDistributedNodesAsync">
+					
 					<div class$="{{_computeColumnClass(column.align)}}" style$="{{_computeColumnStyle(column.width)}}">
+
 						<content id="{{column.field}}" select$="{{_columnContentSelector(column.field)}}"></content>
-						<span hidden$="{{_isOverridden(column.field, _overridden.*)}}">[[_computeColumnValue(column.field, model, model.*)]]</span>
+						
+						<!-- <span hidden$="{{_isOverridden(column.field, _overridden.*)}}">[[_computeColumnValue(column.field, model, model.*)]]</span> -->
+
+						<!-- <template is="dom-if" if="{{column.editable}}">
+							<span>EDITABLE</span>
+						</template> -->
+
+						<mm-inline-edit
+							value="[[_computeColumnValue(column.field, model, model.*)]]"
+							model="{{model}}"
+							field="{{column.field}}"
+							hidden$="{{_isOverridden(column.field, _overridden.*)}}">[[_computeColumnValue(column.field, model, model.*)]] | {{column.field}}</mm-inline-edit>
+
 					</div>
+
 				</template>
+
 			</div>
 		</div>
 		<template is="dom-if" if="{{!model}}">

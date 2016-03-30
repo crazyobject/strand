@@ -16,7 +16,8 @@
 		properties: {
 			model: {
 				type: Object,
-				value: null
+				value: null,
+				// observer: '_modelChanged'
 			},
 			scope: Object,
 			_overridden: {
@@ -34,6 +35,14 @@
 		listeners: {
 			"click" : "_itemClicked"
 		},
+
+		// TEMP - remove
+		// count: 0,
+
+		// _modelChanged: function(newVal) {
+		// 	console.log('model:', newVal);
+		// },
+		//
 
 		_itemClicked: function(e) {
 			var evt = Polymer.dom(e);
@@ -66,10 +75,13 @@
 					this.set("_overridden."+c.id, 0|true);
 				}
 			}
+
+			// this.count++;
+			// console.log(this.count);
 		},
 
 		_isOverridden: function (field) {
-			return this._overridden[field];
+			return this._overridden[field] > -1;
 		},
 
 		_columnContentSelector: function (field) {

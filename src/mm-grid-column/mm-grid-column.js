@@ -88,6 +88,10 @@
 			minWidth: {
 				type: Number,
 				value: 75
+			},
+			editable: {
+				type: String, // 'entity', 'collection', 'date'
+				value: null
 			}
 		},
 
