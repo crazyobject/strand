@@ -29,17 +29,21 @@
 
 						<content id="{{column.field}}" select$="{{_columnContentSelector(column.field)}}"></content>
 						
-						<!-- <span hidden$="{{_isOverridden(column.field, _overridden.*)}}">[[_computeColumnValue(column.field, model, model.*)]]</span> -->
+						<!--
+						<span hidden$="{{_isOverridden(column.field, _overridden.*)}}">[[_computeColumnValue(column.field, model, model.*)]]</span>
+						-->
 
 						<!-- <template is="dom-if" if="{{column.editable}}">
 							<span>EDITABLE</span>
 						</template> -->
 
+						<!--
 						<mm-inline-edit
+							hidden$="{{_isOverridden(column.field, _overridden.*)}}"
 							value="[[_computeColumnValue(column.field, model, model.*)]]"
 							model="{{model}}"
-							field="{{column.field}}"
-							hidden$="{{_isOverridden(column.field, _overridden.*)}}">[[_computeColumnValue(column.field, model, model.*)]] | {{column.field}}</mm-inline-edit>
+							hidden$="{{_isOverridden(column.field, _overridden.*)}}">[[_computeColumnValue(column.field, model, model.*)]]</mm-inline-edit>
+						-->
 
 					</div>
 

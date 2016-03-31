@@ -37,22 +37,21 @@
 		<mm-grid-column editable field="first_name">First Name</mm-grid-column>
 		<mm-grid-column field="last_name">Last Name</mm-grid-column>
 		<mm-grid-column field="email">Email</mm-grid-column>
-		<mm-grid-column field="actions">Actions</mm-grid-column>
 		<template preserve-content>
 			<mm-grid-item model="{{model}}" scope="{{scope}}">
-				<div field="actions">
-					<mm-icon width="15" height="15" type="actions" id="actionIcon"></mm-icon>
+				<div field="first_name">
+					<mm-inline-edit value="{{model.first_name}}" model="{{model}}">{{model.first_name}}</mm-inline-edit>
 				</div>
 			</mm-grid-item>
 		</template>
 	</mm-grid>
 
 	<script type="text/javascript">
-		var model = [];
+		var data = [];
 
 		function generateItems(numItems) {
 			for (var i=0; i < numItems-1; i++) {
-					model.push({
+					data.push({
 					first_name: String(Math.floor(Math.random()*300)) + 'first',
 					last_name: String(Math.floor(Math.random()*300)) + 'last',
 					email: String(Math.floor(Math.random()*300)) + 'email@email.com'
@@ -64,7 +63,7 @@
 
 		window.addEventListener("WebComponentsReady", function() {
 			grid = document.querySelector('#grid');
-			grid.data = model;
+			grid.data = data;
 		});
 		
 	</script>
