@@ -7,6 +7,41 @@
 
 */
 (function(scope) {
+
+	var _openedInstances = [];
+	var __oldBodyPointer;
+
+	function _addOpenedInstance(instance) {
+		_openedInstances.push(instance);
+	}
+
+	function _removeOpenedInstance(instance) {
+		_openedInstances.splice(_openedInstances.indexOf(instance), 1);
+	}
+
+	function _checkDocumentBody(state) {
+		var bodyPointer = document.body.style.pointerEvents;
+		if (state === 'opened') {
+			// for(var i in _openedInstances) {
+			// 	instance = _openedInstances[i];
+			// 	console.log('opened: ', instance);
+			// }
+			// only set body on first opened instance
+			if (_openedInstances.length === 1) {
+				__oldBodyPointer = document.body.style.pointerEvents;
+				document.body.style.pointerEvents = 'none';
+			}
+		} else {
+			// for(var i in _openedInstances) {
+			// 	instance = _openedInstances[i];
+			// 	console.log('closed: ', instance);
+			// }
+			// only reset body if no opened instance
+			if (_openedInstances.length === 0) {
+				document.body.style.pointerEvents = this.__oldBodyPointer || '';
+			}
+		}
+	}
 	
 	scope.NonScrollable = {
 		properties: {
@@ -16,39 +51,42 @@
 			}
 		},
 
-		observers:["_handleState(state)"],
+		__oldInstancePointer: null,
 
+		observers:['_handleState(state)'],
+
+		// TODO: attached/detached
 		detached: function() {
-			this.style.pointerEvents = this.__oldInstancePointer  || "";
-			if(this._target && this._target.style) this._target.style.pointerEvents = this.__oldTargetPointer || "";
-			document.body.style.pointerEvents = this.__oldBodyPointer || "";
+			this.style.pointerEvents = this.__oldInstancePointer  || '';
+			if(this._target && this._target.style) this._target.style.pointerEvents = this.__oldTargetPointer || '';
+			document.body.style.pointerEvents = this.__oldBodyPointer || '';
 		},
 
-		_handleState:function() {
+		_handleState:function(state) {
 			if (this.disableScroll) {
-				this.debounce("nonscrollable", this._updateStyles);
-			}
-		},
+				if (state === 'opened') {
+					_addOpenedInstance(this);
+					_checkDocumentBody('opened');
 
-		_updateStyles: function() {
-			if (this.state === "opened") {
-				
-				this.__oldInstancePointer = this.style.pointerEvents;
-				this.style.pointerEvents = "all";
+					this.__oldInstancePointer = this.style.pointerEvents;
+					this.style.pointerEvents = 'all';
 
-				if(this._target && this._target.style) {
-					this.__oldTargetPointer = this._target.style.pointerEvents;
-					this._target.style.pointerEvents = "all";
+					if (this._target && this._target.style) {
+						this.__oldTargetPointer = this._target.style.pointerEvents;
+						this._target.style.pointerEvents = 'all';
+					}
+				} else {
+					_removeOpenedInstance(this);
+					_checkDocumentBody('closed');
+
+					this.style.pointerEvents = this.__oldInstancePointer || '';
+
+					if (this._target && this._target.style) {
+						this._target.style.pointerEvents = this.__oldTargetPointer || '';
+					}
 				}
-
-				this.__oldBodyPointer = document.body.style.pointerEvents;
-				document.body.style.pointerEvents = "none";
-			} else {
-				this.style.pointerEvents = this.__oldInstancePointer  || "";
-				if(this._target && this._target.style) this._target.style.pointerEvents = this.__oldTargetPointer || "";
-				document.body.style.pointerEvents = this.__oldBodyPointer || "";
 			}
-		},
+		}
 
 	};
 
