@@ -42,6 +42,7 @@
 			this.style.flexDirection = flexDir;
 			this.style.justifyContent = justify;
 			this.style.alignItems = align;
+			
 		}
 
 	});
